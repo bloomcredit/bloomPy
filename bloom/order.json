@@ -1,0 +1,11 @@
+{
+    "data": {
+        "attributes": {
+            "async": true,
+            "consumer_id": "<consumer_id>",
+            "portfolio_id": "<portfolio_id>",
+            "sku": "<sku>"
+        },
+        "type": "orders"
+    }
+}
