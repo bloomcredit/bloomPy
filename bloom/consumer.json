@@ -1,0 +1,24 @@
+{
+    "data": {
+        "attributes": {
+            "name": {
+                "first_name": "<first_name>",
+                "last_name": "<last_name>",
+                "middle_name": "<middle_name>"
+            },
+            "addresses": [
+                {
+                    "city": "<city>",
+                    "line1": "<line1>",
+                    "line2": "<line2>",
+                    "state_code": "<state_code>",
+                    "primary": <address_primary>,
+                    "zipcode": "<zipcode>"
+                }
+            ],
+            "date_of_birth": "<date_of_birth>",
+            "ssn": "<ssn>"
+        },
+        "type": "consumers"
+    }
+}
