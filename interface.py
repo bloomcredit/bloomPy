@@ -33,17 +33,19 @@ consumer_info = {
 }
 
 consumer_id = bloom.register_consumer(
-    audience='dev',
+    audience='dev-api',
     consumer_info=consumer_info,
     auth_token=auth_token
 )
+
+exit()
 
 
 # -----------------------------------------------------------------------------
 #                           order_credit_data
 # -----------------------------------------------------------------------------
 credit_order = bloom.order_credit_data(
-    audience='dev',
+    audience='dev-api',
     consumer_id=consumer_id,
     portfolio_id=None,
     sku=None,
@@ -55,7 +57,7 @@ credit_order = bloom.order_credit_data(
 # -----------------------------------------------------------------------------
 
 credit_data = bloom.get_credit_data(
-    audience='dev',
+    audience='dev-api',
     order_id=credit_order['data']['id'],
     auth_token=auth_token
 )

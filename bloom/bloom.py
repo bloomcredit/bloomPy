@@ -38,8 +38,15 @@ def fetch_auth_token(audience=None, client_id=None, client_secret=None, grant_ty
     https://developers.bloomcredit.io/docs/onboarding-to-first-credit-report#getting-an-access-token
     """
 
+    audience = audience or os.getenv('BLOOM_AUDIENCE')
+
+    if audience == 'dev-api':
+        url = os.getenv('BLOOM_SANDBOX_AUTH_URL')
+    else:
+        url = os.getenv('BLOOM_PRODUCTION_AUTH_URL')
+
     payload = {
-        'audience': audience or os.getenv('BLOOM_AUDIENCE'),
+        'audience': audience,
         'client_id': client_id or os.getenv('BLOOM_CLIENT_ID'),
         'client_secret': client_secret or os.getenv('BLOOM_CLIENT_SECRET'),
         'grant_type': grant_type or os.getenv('BLOOM_TOKEN_GRANT')
@@ -48,9 +55,10 @@ def fetch_auth_token(audience=None, client_id=None, client_secret=None, grant_ty
     try:
         response = request(
             "POST",
-            os.getenv('BLOOM_AUTH_URL'),
+            url,
             headers={
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Partner': "2e114527-50e1-4857-bc14-7f20fe49b38f"
             },
             data=payload,
             timeout=10
@@ -81,7 +89,7 @@ def register_consumer(audience, consumer_info, auth_token):
     https://developers.bloomcredit.io/docs/onboarding-to-first-credit-report#creating-a-consumer
     """
 
-    if audience == 'dev':
+    if audience == 'dev-api':
         url = os.getenv('BLOOM_SANDBOX_CONSUMER_URL')
     else:
         url = os.getenv('BLOOM_PRODUCTION_CONSUMER_URL')
@@ -111,6 +119,7 @@ def register_consumer(audience, consumer_info, auth_token):
         print('Server took too long to respond.')
     except HTTPError as e:
         print(f"{e.response.status_code}: {e.response.reason}")
+        print(f"{e.response.json()['errors'][0]['detail']}")
     except Exception as e:
         print(e)
     return None
@@ -127,7 +136,7 @@ def order_credit_data(audience, consumer_id, portfolio_id, sku, auth_token):
     https://developers.bloomcredit.io/docs/onboarding-to-first-credit-report#ordering-a-credit-report
     """
 
-    if audience == 'dev':
+    if audience == 'dev-api':
         url = os.getenv('BLOOM_SANDBOX_CONSUMER_URL')
     else:
         url = os.getenv('BLOOM_PRODUCTION_CONSUMER_URL')
@@ -172,7 +181,7 @@ def order_credit_data(audience, consumer_id, portfolio_id, sku, auth_token):
 
 def get_credit_data(audience, order_id, auth_token):
 
-    if audience == 'dev':
+    if audience == 'dev-api':
         url = os.getenv('BLOOM_SANDBOX_ORDERS_URL')
     else:
         url = os.getenv('BLOOM_PRODUCTION_ORDERS_URL')
