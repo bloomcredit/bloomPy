@@ -29,6 +29,6 @@ BLOOM_SANDBOX_ORDER_URL=https://sandbox.bloom.dev/v2/data-access/orders
 BLOOM_PRODUCTION_CONSUMER_URL=https://api.bloomcredit.io/v2/data-access/orders
 
 BLOOM_SANDBOX_ORDERS_URL=https://sandbox.bloom.dev/v2/data-access/orders/<order_id>/full-report
-BLOOM_PRODUCTION_ORDERS_URL=https://api.bloomcredit.io/v2/data-access/orders/<order_id>/full-report=https://bloom.dev/v2/data-access/orders/<order_id>/full-report
+BLOOM_PRODUCTION_ORDERS_URL=https://api.bloomcredit.io/v2/data-access/orders/<order_id>/full-report
 
 ```
