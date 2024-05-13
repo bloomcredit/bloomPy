@@ -19,7 +19,7 @@ def tokenize_json(fn, tokens):
 
     for tag in tags:
         try:
-            repl = tokens[tag[1:-1]]
+            repl = tokens[tag[1:-1]] or ""
             if isinstance(repl, bool):
                 repl = "true" if repl else "false"
         except KeyError:
@@ -137,7 +137,7 @@ def order_credit_data(audience, consumer_id, portfolio_id, sku, auth_token):
     """
 
     if audience == 'dev-api':
-        url = os.getenv('BLOOM_SANDBOX_CONSUMER_URL')
+        url = os.getenv('BLOOM_SANDBOX_ORDER_URL')
     else:
         url = os.getenv('BLOOM_PRODUCTION_CONSUMER_URL')
 
@@ -170,6 +170,7 @@ def order_credit_data(audience, consumer_id, portfolio_id, sku, auth_token):
         print('Server took too long to respond.')
     except HTTPError as e:
         print(f"{e.response.status_code}: {e.response.reason}")
+        print(f"{e.response.json()['status_message']}")
     except Exception as e:
         print(e)
     return None

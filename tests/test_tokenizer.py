@@ -21,7 +21,16 @@ class TestFetchAuthToken(unittest.TestCase):
         }
 
         new = tokenize_json('consumer.json', consumer_info)
-
         data = json.loads(new)
-
         self.assertTrue(data['data']['attributes']['addresses'][0]['primary'])
+
+    def test_empty_order_portfolio(self):
+        """make sure the more complex replacements take place."""
+
+        payload = tokenize_json('order.json', {
+            'consumer_id': None,
+            'portfolio_id': None,
+            'sku': None
+        })
+        data = json.loads(payload)
+        self.assertIs("", data['data']['attributes']['portfolio_id'])
