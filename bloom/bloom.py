@@ -1,5 +1,6 @@
 import re
 import os
+import json
 from pathlib import Path
 from requests import request, HTTPError, Timeout
 from dotenv import load_dotenv
@@ -74,6 +75,51 @@ def fetch_auth_token(audience=None, client_id=None, client_secret=None, grant_ty
         print('Server took too long to respond.')
     except HTTPError as e:
         print(f"{e.response.status_code}: {e.response.reason}")
+    except Exception as e:
+        print(e)
+    return None
+
+
+# -----------------------------------------------------------------------------
+#                            get_portfolios
+# -----------------------------------------------------------------------------
+
+def get_portfolios(audience, auth_token):
+    """Organizations are representations of a companies. They contain
+    multiple Portfolios which represent Credit Products managed by a company.
+    https://developers.bloomcredit.io/docs/onboarding-to-first-credit-report#fetching-your-organizations-portfolios
+    """
+
+    if audience == 'dev-api':
+        url = os.getenv('BLOOM_SANDBOX_ORG_URL')
+    else:
+        url = os.getenv('BLOOM_PRODUCTION_ORG_URL')
+
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "authorization": f"Bearer {auth_token}"
+    }
+
+    try:
+        response = request(
+            "GET",
+            url=url,
+            headers=headers,
+            timeout=10
+        )
+        response.raise_for_status()
+
+        print(json.dumps(response.json(), indent=4))
+        return response.json()['data']['attributes']['portfolios'][0]['id']
+    except KeyError:
+        print('No consumer id returned from Bloom Credit.')
+        print(response.json())
+    except Timeout:
+        print('Server took too long to respond.')
+    except HTTPError as e:
+        print(f"{e.response.status_code}: {e.response.reason}")
+        # print(f"{e.response.json()['errors'][0]['detail']}")
     except Exception as e:
         print(e)
     return None

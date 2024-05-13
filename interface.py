@@ -1,5 +1,7 @@
-from bloom import bloom
+"""Interface for Bloom Credit Report Retrieval."""
 
+import json
+from bloom import bloom
 
 # -----------------------------------------------------------------------------
 #                           fetch_auth_token
@@ -14,6 +16,16 @@ auth_token = bloom.fetch_auth_token(
     client_id=None,
     client_secret=None,
     grant_type=None
+)
+
+# -----------------------------------------------------------------------------
+#                           fetch_portfolios
+# -----------------------------------------------------------------------------
+# TODO: Clarify multiple portfolios process.  Determine which to use.
+
+portfolio_id = bloom.get_portfolios(
+    audience='dev-api',
+    auth_token=auth_token
 )
 
 # -----------------------------------------------------------------------------
@@ -38,17 +50,14 @@ consumer_id = bloom.register_consumer(
     auth_token=auth_token
 )
 
-exit()
-
-
 # -----------------------------------------------------------------------------
 #                           order_credit_data
 # -----------------------------------------------------------------------------
 credit_order = bloom.order_credit_data(
     audience='dev-api',
     consumer_id=consumer_id,
-    portfolio_id=None,
-    sku=None,
+    portfolio_id=portfolio_id,
+    sku="equifax-gold-soft-fico-internet",
     auth_token=auth_token
 )
 
@@ -58,6 +67,8 @@ credit_order = bloom.order_credit_data(
 
 credit_data = bloom.get_credit_data(
     audience='dev-api',
-    order_id=credit_order['data']['id'],
+    order_id=credit_order,
     auth_token=auth_token
 )
+
+print(json.dumps(credit_data, indent=4))
