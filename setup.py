@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='bloomPy',
     version='0.1.0',
-    packages=[''],
+    packages=['bloom'],
     url='',
     license='MIT License',
     author='Glenn',
