@@ -66,7 +66,7 @@ def fetch_auth_token(audience=None, client_id=None, client_secret=None, grant_ty
         )
 
         response.raise_for_status()
-        return response.json()['access_token']
+        return response.json()['access_token'], response.json()
 
     except KeyError:
         print('No token was included in the response from the server.')

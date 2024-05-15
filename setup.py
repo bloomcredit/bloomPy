@@ -29,6 +29,6 @@ setup(name=PACKAGE_NAME,
       author_email=AUTHOR_EMAIL,
       url=URL,
       install_requires=INSTALL_REQUIRES,
-      packages=find_packages(where="bloom"),
-      package_dir={"": "bloom"},
+      packages=find_packages(where="src"),
+      package_dir={"": "src"},
       )
