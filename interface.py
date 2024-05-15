@@ -1,7 +1,5 @@
 """Interface for Bloom Credit Report Retrieval."""
-
-import json
-from bloom import bloom
+from src.bloom import bloom
 
 # -----------------------------------------------------------------------------
 #                           fetch_auth_token
@@ -17,6 +15,7 @@ auth_token = bloom.fetch_auth_token(
     client_secret=None,
     grant_type=None
 )
+
 
 # -----------------------------------------------------------------------------
 #                           fetch_portfolios
@@ -68,7 +67,7 @@ credit_order = bloom.order_credit_data(
 credit_data = bloom.get_credit_data(
     audience='dev-api',
     order_id=credit_order,
-    auth_token=auth_token
+    auth_token=auth_token,
+    outfile="credit_data.json"
 )
 
-print(json.dumps(credit_data, indent=4))
