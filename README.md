@@ -14,7 +14,7 @@ Installation
 
 To install, you can use pip:
 
-    pip install requests requests-oauthlib
+    pip install git+https://github.com/CaffeineLab/bloomPy.git
 
  
 Environmental Variables
