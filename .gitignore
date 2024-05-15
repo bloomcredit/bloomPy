@@ -160,3 +160,4 @@ cython_debug/
 .idea/
 /.pylintrc
 /_project/
+/interface.py
