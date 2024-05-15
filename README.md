@@ -33,7 +33,7 @@ BLOOM_AUDIENCE=<audience>
 Usage
 -------------
 
-###Fetch Token
+### Fetch Token
 ```
 # Fetch Token using credentials stored in the .env file
 auth_token = bloom.fetch_auth_token()
@@ -51,7 +51,7 @@ auth_token = bloom.fetch_auth_token(
 print(auth_token)
 ```
 
-###Fetch Portfolios
+### Fetch Portfolios
 Just a reference function for pulling the list of portfolios for the current organization.
  ```
 portfolio_id = bloom.get_portfolios(
@@ -60,7 +60,7 @@ portfolio_id = bloom.get_portfolios(
 )
 ```
 
-###Register Consumer
+### Register Consumer
  ```
 consumer_info = {
     "ssn": "123456789",
@@ -81,7 +81,7 @@ consumer_id = bloom.register_consumer(
 )
 ```
 
-###Order Credit Data
+### Order Credit Data
  ```
 credit_order = bloom.order_credit_data(
     audience='<audience>',
@@ -92,7 +92,7 @@ credit_order = bloom.order_credit_data(
 )
 ```
 
-###Get Credit Data
+### Get Credit Data
 If you use the outfile parameter, it will save the response from Bloom Credit into the given filepath.
  ``` 
 credit_data = bloom.get_credit_data(
