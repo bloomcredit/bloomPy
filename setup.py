@@ -3,8 +3,8 @@ from setuptools import setup, find_packages
 
 HERE = pathlib.Path(__file__).parent
 
-VERSION = '0.1.4'
-PACKAGE_NAME = 'bloomPy'
+VERSION = '0.1.5'
+PACKAGE_NAME = 'bloomcredit-python'
 AUTHOR = 'Glenn'
 AUTHOR_EMAIL = 'glenn@caffeinelab.com'
 URL = ''

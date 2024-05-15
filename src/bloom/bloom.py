@@ -10,6 +10,7 @@ BLOOM_FOLDER = Path(__file__).parent.resolve()
 load_dotenv(BLOOM_FOLDER / "endpoints.env")
 load_dotenv()
 
+
 # -----------------------------------------------------------------------------
 #                           Utilities
 # -----------------------------------------------------------------------------
@@ -30,6 +31,10 @@ def tokenize_json(fn, tokens):
     return json_data
 
 
+def coalesce(*arg):
+    return next((a for a in arg if a is not None), None)
+
+
 # -----------------------------------------------------------------------------
 #                           fetch_auth_token
 # -----------------------------------------------------------------------------
@@ -40,19 +45,17 @@ def fetch_auth_token(audience=None, client_id=None, client_secret=None, grant_ty
     https://developers.bloomcredit.io/docs/onboarding-to-first-credit-report#getting-an-access-token
     """
 
-    audience = audience or os.getenv('BLOOM_AUDIENCE')
+    payload = {
+        'audience': coalesce(audience, os.getenv('BLOOM_AUDIENCE')),
+        'client_id': coalesce(client_id, os.getenv('BLOOM_CLIENT_ID')),
+        'client_secret': coalesce(client_secret, os.getenv('BLOOM_CLIENT_SECRET')),
+        'grant_type': coalesce(grant_type, os.getenv('BLOOM_TOKEN_GRANT'))
+    }
 
-    if audience == 'dev-api':
+    if payload['audience'] == 'dev-api':
         url = os.getenv('BLOOM_SANDBOX_AUTH_URL')
     else:
         url = os.getenv('BLOOM_PRODUCTION_AUTH_URL')
-
-    payload = {
-        'audience': audience,
-        'client_id': client_id or os.getenv('BLOOM_CLIENT_ID'),
-        'client_secret': client_secret or os.getenv('BLOOM_CLIENT_SECRET'),
-        'grant_type': grant_type or os.getenv('BLOOM_TOKEN_GRANT')
-    }
 
     try:
         response = request(
@@ -64,33 +67,30 @@ def fetch_auth_token(audience=None, client_id=None, client_secret=None, grant_ty
             data=payload,
             timeout=10
         )
-
         response.raise_for_status()
-        return response.json()['access_token']
-
+        return response.json()['access_token'], response.json()
     except KeyError:
-        print('No token was included in the response from the server.')
-        print(response.json())
+        # No token was included in the response from the server
+        return None, response.json()
     except Timeout:
-        print('Server took too long to respond.')
+        return None, "Server Timeout"
     except HTTPError as e:
-        print(f"{e.response.status_code}: {e.response.reason}")
+        return None, f"{e.response.status_code}: {e.response.reason}"
     except Exception as e:
-        print(e)
-    return None
+        return None, e
 
 
 # -----------------------------------------------------------------------------
 #                            get_portfolios
 # -----------------------------------------------------------------------------
 
-def get_portfolios(audience, auth_token):
+def get_portfolios(auth_token, audience=None):
     """Organizations are representations of a companies. They contain
     multiple Portfolios which represent Credit Products managed by a company.
     https://developers.bloomcredit.io/docs/onboarding-to-first-credit-report#fetching-your-organizations-portfolios
     """
 
-    if audience == 'dev-api':
+    if coalesce(audience, os.getenv('BLOOM_AUDIENCE')) == 'dev-api':
         url = os.getenv('BLOOM_SANDBOX_ORG_URL')
     else:
         url = os.getenv('BLOOM_PRODUCTION_ORG_URL')
@@ -109,20 +109,16 @@ def get_portfolios(audience, auth_token):
             timeout=10
         )
         response.raise_for_status()
-
-        print(json.dumps(response.json(), indent=4))
-        return response.json()['data']['attributes']['portfolios'][0]['id']
+        return response.json()['data']['attributes']['portfolios'][0]['id'], response.json()
     except KeyError:
-        print('No consumer id returned from Bloom Credit.')
-        print(response.json())
+        # No consumer id returned from Bloom Credit
+        return None, response.json()
     except Timeout:
-        print('Server took too long to respond.')
+        return None, "Server Timeout"
     except HTTPError as e:
-        print(f"{e.response.status_code}: {e.response.reason}")
-        # print(f"{e.response.json()['errors'][0]['detail']}")
+        return None, f"{e.response.status_code}: {e.response.reason}"
     except Exception as e:
-        print(e)
-    return None
+        return None, e
 
 
 # -----------------------------------------------------------------------------
@@ -135,7 +131,7 @@ def register_consumer(audience, consumer_info, auth_token):
     https://developers.bloomcredit.io/docs/onboarding-to-first-credit-report#creating-a-consumer
     """
 
-    if audience == 'dev-api':
+    if coalesce(audience, os.getenv('BLOOM_AUDIENCE')) == 'dev-api':
         url = os.getenv('BLOOM_SANDBOX_CONSUMER_URL')
     else:
         url = os.getenv('BLOOM_PRODUCTION_CONSUMER_URL')
@@ -157,18 +153,16 @@ def register_consumer(audience, consumer_info, auth_token):
             timeout=10
         )
         response.raise_for_status()
-        return response.json()['data']['id']
+        return response.json()['data']['id'], response
     except KeyError:
-        print('No consumer id returned from Bloom Credit.')
-        print(response.json())
+        # No consumer id returned from Bloom Credit
+        return None, response.json()
     except Timeout:
-        print('Server took too long to respond.')
+        return None, "Server Timeout"
     except HTTPError as e:
-        print(f"{e.response.status_code}: {e.response.reason}")
-        print(f"{e.response.json()['errors'][0]['detail']}")
+        return None, f"{e.response.status_code}: {e.response.reason}"
     except Exception as e:
-        print(e)
-    return None
+        return None, e
 
 
 # -----------------------------------------------------------------------------
@@ -182,7 +176,7 @@ def order_credit_data(audience, consumer_id, portfolio_id, sku, auth_token):
     https://developers.bloomcredit.io/docs/onboarding-to-first-credit-report#ordering-a-credit-report
     """
 
-    if audience == 'dev-api':
+    if coalesce(audience, os.getenv('BLOOM_AUDIENCE')) == 'dev-api':
         url = os.getenv('BLOOM_SANDBOX_ORDER_URL')
     else:
         url = os.getenv('BLOOM_PRODUCTION_CONSUMER_URL')
@@ -208,18 +202,16 @@ def order_credit_data(audience, consumer_id, portfolio_id, sku, auth_token):
             timeout=10
         )
         response.raise_for_status()
-        return response.json()['data']['id']
+        return response.json()['data']['id'], response
     except KeyError:
-        print('No order id returned from Bloom Credit.')
-        print(response.json())
+        # No order id returned from Bloom Credit
+        return None, response.json()
     except Timeout:
-        print('Server took too long to respond.')
+        return None, "Server Timeout"
     except HTTPError as e:
-        print(f"{e.response.status_code}: {e.response.reason}")
-        print(f"{e.response.json()['status_message']}")
+        return None, f"{e.response.status_code}: {e.response.reason}"
     except Exception as e:
-        print(e)
-    return None
+        return None, e
 
 
 # -----------------------------------------------------------------------------
@@ -228,7 +220,7 @@ def order_credit_data(audience, consumer_id, portfolio_id, sku, auth_token):
 
 def get_credit_data(audience, order_id, auth_token, outfile=None):
 
-    if audience == 'dev-api':
+    if coalesce(audience, os.getenv('BLOOM_AUDIENCE')) == 'dev-api':
         url = os.getenv('BLOOM_SANDBOX_ORDERS_URL')
     else:
         url = os.getenv('BLOOM_PRODUCTION_ORDERS_URL')
@@ -252,11 +244,12 @@ def get_credit_data(audience, order_id, auth_token, outfile=None):
         if outfile is not None:
             with open(outfile, "w", encoding="utf-8") as f:
                 f.write(json.dumps(response.json(), indent=4))
-        return response.json()
+
+        return json.dumps(response.json(), indent=4), response.json()
+
     except Timeout:
-        print('Server took too long to respond.')
+        return None, "Server Timeout"
     except HTTPError as e:
-        print(f"{e.response.status_code}: {e.response.reason}")
+        return None, f"{e.response.status_code}: {e.response.reason}"
     except Exception as e:
-        print(e)
-    return None
+        return None, e

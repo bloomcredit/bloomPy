@@ -9,23 +9,24 @@ from src.bloom import bloom
 # auth_token = bloom.fetch_auth_token()
 
 # Override the .env file credentials.
-auth_token = bloom.fetch_auth_token(
+auth_token, response = bloom.fetch_auth_token(
     audience=None,
     client_id=None,
     client_secret=None,
     grant_type=None
 )
 
-
 # -----------------------------------------------------------------------------
 #                           fetch_portfolios
 # -----------------------------------------------------------------------------
 # TODO: Clarify multiple portfolios process.  Determine which to use.
 
-portfolio_id = bloom.get_portfolios(
-    audience='dev-api',
-    auth_token=auth_token
+portfolio_id, response = bloom.get_portfolios(
+    auth_token=auth_token,
+    audience=None
 )
+
+
 
 # -----------------------------------------------------------------------------
 #                           register_consumer
@@ -43,8 +44,8 @@ consumer_info = {
     "address_primary": True
 }
 
-consumer_id = bloom.register_consumer(
-    audience='dev-api',
+consumer_id, response = bloom.register_consumer(
+    audience=None,
     consumer_info=consumer_info,
     auth_token=auth_token
 )
@@ -52,8 +53,8 @@ consumer_id = bloom.register_consumer(
 # -----------------------------------------------------------------------------
 #                           order_credit_data
 # -----------------------------------------------------------------------------
-credit_order = bloom.order_credit_data(
-    audience='dev-api',
+credit_order, response = bloom.order_credit_data(
+    audience=None,
     consumer_id=consumer_id,
     portfolio_id=portfolio_id,
     sku="equifax-gold-soft-fico-internet",
@@ -64,8 +65,8 @@ credit_order = bloom.order_credit_data(
 #                           get_credit_data
 # -----------------------------------------------------------------------------
 
-credit_data = bloom.get_credit_data(
-    audience='dev-api',
+credit_data, response = bloom.get_credit_data(
+    audience=None,
     order_id=credit_order,
     auth_token=auth_token,
     outfile="credit_data.json"
