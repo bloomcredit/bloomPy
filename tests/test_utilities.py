@@ -1,9 +1,9 @@
 import unittest
 import json
-from bloom.bloom import tokenize_json
+from src.bloom.bloom import tokenize_json, coalesce
 
 
-class TestFetchAuthToken(unittest.TestCase):
+class TestUtilitiies(unittest.TestCase):
 
     def test_empty_env(self):
         """make sure the more complex replacements take place."""
@@ -34,3 +34,11 @@ class TestFetchAuthToken(unittest.TestCase):
         })
         data = json.loads(payload)
         self.assertIs("", data['data']['attributes']['portfolio_id'])
+
+    def test_coalesce(self):
+
+        self.assertIs("", coalesce('', 'hi'))
+        self.assertIs("", coalesce('', None, 'hi'))
+        self.assertIs("", coalesce(None, '', None, 'hi'))
+        self.assertIs("hi", coalesce('hi', None, '', None, 'hi'))
+
