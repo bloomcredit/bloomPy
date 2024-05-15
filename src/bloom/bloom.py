@@ -5,9 +5,10 @@ from pathlib import Path
 from requests import request, HTTPError, Timeout
 from dotenv import load_dotenv
 
-load_dotenv()
-BLOOM_FOLDER = Path(__file__).parent.resolve()
 
+BLOOM_FOLDER = Path(__file__).parent.resolve()
+load_dotenv(BLOOM_FOLDER / "endpoints.env")
+load_dotenv()
 
 # -----------------------------------------------------------------------------
 #                           Utilities

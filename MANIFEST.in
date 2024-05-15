@@ -1,2 +1,2 @@
 include src/bloom/*.json
-include src/bloom/.env
+include src/bloom/endpoints.env
