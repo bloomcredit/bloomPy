@@ -59,15 +59,14 @@ def fetch_auth_token(audience=None, client_id=None, client_secret=None, grant_ty
             "POST",
             url,
             headers={
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Partner': "2e114527-50e1-4857-bc14-7f20fe49b38f"
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
             data=payload,
             timeout=10
         )
 
         response.raise_for_status()
-        return response.json()['access_token'], response.json()
+        return response.json()['access_token']
 
     except KeyError:
         print('No token was included in the response from the server.')
@@ -227,7 +226,7 @@ def order_credit_data(audience, consumer_id, portfolio_id, sku, auth_token):
 #                           get_credit_data
 # -----------------------------------------------------------------------------
 
-def get_credit_data(audience, order_id, auth_token):
+def get_credit_data(audience, order_id, auth_token, outfile=None):
 
     if audience == 'dev-api':
         url = os.getenv('BLOOM_SANDBOX_ORDERS_URL')
@@ -249,6 +248,10 @@ def get_credit_data(audience, order_id, auth_token):
             timeout=10
         )
         response.raise_for_status()
+
+        if outfile is not None:
+            with open(outfile, "w", encoding="utf-8") as f:
+                f.write(json.dumps(response.json(), indent=4))
         return response.json()
     except Timeout:
         print('Server took too long to respond.')
