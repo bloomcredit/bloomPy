@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 HERE = pathlib.Path(__file__).parent
 
-VERSION = '0.1.1'
+VERSION = '0.1.2'
 PACKAGE_NAME = 'bloomPy'
 AUTHOR = 'Glenn'
 AUTHOR_EMAIL = 'glenn@caffeinelab.com'
@@ -31,4 +31,5 @@ setup(name=PACKAGE_NAME,
       install_requires=INSTALL_REQUIRES,
       packages=find_packages(where="src"),
       package_dir={"": "src"},
+      include_package_data=True,
       )

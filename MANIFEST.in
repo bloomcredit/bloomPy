@@ -1,0 +1,2 @@
+include src/bloom/*.json
+includ src/bloom/*.env
