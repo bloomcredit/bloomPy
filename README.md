@@ -36,13 +36,13 @@ Usage
 ### Fetch Token
 ```
 # Fetch Token using credentials stored in the .env file
-auth_token = bloom.fetch_auth_token()
+auth_token, response = bloom.fetch_auth_token()
 print(auth_token)
 ```
 
 ```
 # Fetch Token ignoring credentials stored in the .env file
-auth_token = bloom.fetch_auth_token(
+auth_token, response = bloom.fetch_auth_token(
     audience="<audience>",
     client_id="<client_id>",
     client_secret="<client_secret>",
@@ -54,7 +54,7 @@ print(auth_token)
 ### Fetch Portfolios
 Just a reference function for pulling the list of portfolios for the current organization.
  ```
-portfolio_id = bloom.get_portfolios(
+portfolio_id, response = bloom.get_portfolios(
     audience=<audience>,
     auth_token=auth_token
 )
@@ -74,7 +74,7 @@ consumer_info = {
     "address_primary": True
 }
 
-consumer_id = bloom.register_consumer(
+consumer_id, response = bloom.register_consumer(
     audience="<audience>",
     consumer_info=consumer_info,
     auth_token=auth_token
@@ -83,7 +83,7 @@ consumer_id = bloom.register_consumer(
 
 ### Order Credit Data
  ```
-credit_order = bloom.order_credit_data(
+credit_order, response = bloom.order_credit_data(
     audience='<audience>',
     consumer_id=consumer_id,
     portfolio_id=portfolio_id,
@@ -95,7 +95,7 @@ credit_order = bloom.order_credit_data(
 ### Get Credit Data
 If you use the outfile parameter, it will save the response from Bloom Credit into the given filepath.
  ``` 
-credit_data = bloom.get_credit_data(
+credit_data, response = bloom.get_credit_data(
     audience="<audience>",
     order_id=credit_order,
     auth_token=auth_token,
