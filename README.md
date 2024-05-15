@@ -1,4 +1,4 @@
-# bloomPy
+# bloomcredit-python
 Use the Bloom Credit API with Python.
 
 
@@ -16,7 +16,7 @@ Installation
 
 To install, you can use pip:
 
-    pip install git+https://github.com/CaffeineLab/bloomPy.git
+    pip install git+https://github.com/CaffeineLab/bloomcredit-python.git
 
  
 Environmental Variables
