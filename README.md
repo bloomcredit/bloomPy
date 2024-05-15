@@ -55,7 +55,6 @@ print(auth_token)
 Just a reference function for pulling the list of portfolios for the current organization.
  ```
 portfolio_id, response = bloom.get_portfolios(
-    audience=<audience>,
     auth_token=auth_token
 )
 ```
@@ -75,7 +74,6 @@ consumer_info = {
 }
 
 consumer_id, response = bloom.register_consumer(
-    audience="<audience>",
     consumer_info=consumer_info,
     auth_token=auth_token
 )
@@ -84,7 +82,6 @@ consumer_id, response = bloom.register_consumer(
 ### Order Credit Data
  ```
 credit_order, response = bloom.order_credit_data(
-    audience='<audience>',
     consumer_id=consumer_id,
     portfolio_id=portfolio_id,
     sku="equifax-gold-soft-fico-internet",
@@ -96,9 +93,8 @@ credit_order, response = bloom.order_credit_data(
 If you use the outfile parameter, it will save the response from Bloom Credit into the given filepath.
  ``` 
 credit_data, response = bloom.get_credit_data(
-    audience="<audience>",
     order_id=credit_order,
     auth_token=auth_token,
-    outfile="/path/to/file.json"
+    outfile="credit_data.json"
 )
 ```

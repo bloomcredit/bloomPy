@@ -125,7 +125,7 @@ def get_portfolios(auth_token, audience=None):
 #                           register_consumer
 # -----------------------------------------------------------------------------
 
-def register_consumer(audience, consumer_info, auth_token):
+def register_consumer(consumer_info, auth_token, audience=None):
     """ Consumers are representations of persons within the Bloom API.
     To order a credit report for a consumer, you first need to submit their information to Bloom.
     https://developers.bloomcredit.io/docs/onboarding-to-first-credit-report#creating-a-consumer
@@ -168,7 +168,7 @@ def register_consumer(audience, consumer_info, auth_token):
 # -----------------------------------------------------------------------------
 #                           order_credit_data
 # -----------------------------------------------------------------------------
-def order_credit_data(audience, consumer_id, portfolio_id, sku, auth_token):
+def order_credit_data(consumer_id, portfolio_id, sku, auth_token, audience=None):
     """ Once your consumer is created, you can order a credit report via the
     Bloom API. This order will be made for Bloom to fetch the credit report
     for your order.
@@ -218,7 +218,7 @@ def order_credit_data(audience, consumer_id, portfolio_id, sku, auth_token):
 #                           get_credit_data
 # -----------------------------------------------------------------------------
 
-def get_credit_data(audience, order_id, auth_token, outfile=None):
+def get_credit_data(order_id, auth_token, audience=None, outfile=None):
 
     if coalesce(audience, os.getenv('BLOOM_AUDIENCE')) == 'dev-api':
         url = os.getenv('BLOOM_SANDBOX_ORDERS_URL')
