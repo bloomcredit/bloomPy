@@ -44,6 +44,7 @@ print(auth_token)
 # Fetch Token ignoring credentials stored in the .env file
 auth_token, response = bloom.fetch_auth_token(
     audience="<audience>",
+    scope="data-access:all",
     client_id="<client_id>",
     client_secret="<client_secret>",
     grant_type="client_credentials"
