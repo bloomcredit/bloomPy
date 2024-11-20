@@ -8,6 +8,7 @@ class TestFetchAuthToken(unittest.TestCase):
         self.assertIsNone(
             fetch_auth_token(
                 audience="",
+                scope="",
                 client_id="",
                 client_secret="",
                 grant_type=""

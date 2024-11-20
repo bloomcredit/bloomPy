@@ -39,7 +39,7 @@ def coalesce(*arg):
 #                           fetch_auth_token
 # -----------------------------------------------------------------------------
 
-def fetch_auth_token(audience=None, client_id=None, client_secret=None, grant_type=None):
+def fetch_auth_token(audience=None, scope=None, client_id=None, client_secret=None, grant_type=None):
     """
     Retrieve a token from the Bloom Credit Authentication URL.
     https://developers.bloomcredit.io/docs/onboarding-to-first-credit-report#getting-an-access-token
@@ -47,6 +47,7 @@ def fetch_auth_token(audience=None, client_id=None, client_secret=None, grant_ty
 
     payload = {
         'audience': coalesce(audience, os.getenv('BLOOM_AUDIENCE')),
+        'scope': coalesce(scope, os.getenv('BLOOM_DATA_ACCESS_SCOPE')),
         'client_id': coalesce(client_id, os.getenv('BLOOM_CLIENT_ID')),
         'client_secret': coalesce(client_secret, os.getenv('BLOOM_CLIENT_SECRET')),
         'grant_type': coalesce(grant_type, os.getenv('BLOOM_TOKEN_GRANT'))
