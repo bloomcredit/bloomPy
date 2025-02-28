@@ -16,7 +16,7 @@ Installation
 
 To install, you can use pip:
 
-    pip install git+https://github.com/CaffeineLab/bloomcredit-python.git
+    pip install git+https://github.com/bloomcredit/bloompy
 
  
 Environmental Variables
